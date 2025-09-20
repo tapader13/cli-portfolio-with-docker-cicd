@@ -12,13 +12,13 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Build Docker image
-        run: docker build . -t tapader5765/cli-portfolio-cicd
+        run: docker build . -t tapader5765/cli-portfolio-cicd:${GITHUB_SHA}
 
       - name: Login to DockerHub
         run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
 
       - name: Push Docker image
-        run: docker push tapader5765/cli-portfolio-cicd
+        run: docker push tapader5765/cli-portfolio-cicd:${GITHUB_SHA}
 
       - name: Trigger Render deploy
         run: |
