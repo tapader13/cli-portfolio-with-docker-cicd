@@ -32,7 +32,6 @@ type CommandType =
   | 'contact'
   | 'education'
   | 'clear'
-  | 'version'
   | 'home'
   | 'unknown';
 
@@ -64,7 +63,6 @@ export function Terminal() {
     'contact',
     'education',
     'clear',
-    'version',
     'home',
   ];
 
@@ -300,17 +298,6 @@ export function Terminal() {
         setShowWelcome(true);
         setWelcomeComplete(false);
         return;
-      case 'version':
-        output = (
-          <div className='flex items-center space-x-2'>
-            <FaTerminal className='text-green-400' />
-            <span className='text-green-400 font-bold'>Minhaj CLI v2.0.0</span>
-            <span className='text-gray-400'>
-              - Modern Interactive Portfolio
-            </span>
-          </div>
-        );
-        break;
       default:
         const suggestions = getCommandSuggestions(trimmedCmd);
         output = (
@@ -356,7 +343,6 @@ export function Terminal() {
     if (cmd === 'contact') return 'contact';
     if (cmd === 'education') return 'education';
     if (cmd === 'clear') return 'clear';
-    if (cmd === 'version') return 'version';
     if (cmd === 'home') return 'home';
     return 'unknown';
   };
@@ -421,12 +407,6 @@ export function Terminal() {
             desc: 'Clear terminal screen',
             icon: '🧹',
             color: 'text-yellow-400',
-          },
-          {
-            cmd: 'version',
-            desc: 'Show CLI version',
-            icon: '📋',
-            color: 'text-indigo-400',
           },
           {
             cmd: 'home',
