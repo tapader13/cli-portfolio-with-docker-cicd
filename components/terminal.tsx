@@ -1,6 +1,8 @@
 'use client';
 
 import type React from 'react';
+import { useMediaQuery } from '@/hooks/use-media-query';
+
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { cn } from '@/lib/utils';
 import { projects } from '@/data/projects';
@@ -8,6 +10,7 @@ import { skills } from '@/data/skills';
 import { about } from '@/data/about';
 import { contact } from '@/data/contact';
 import { education } from '@/data/education';
+import { experience } from '@/data/experience';
 import {
   FaCode,
   FaUser,
@@ -22,6 +25,7 @@ import {
   FaInstagram,
   FaTwitter,
   FaGraduationCap,
+  FaBriefcase,
 } from 'react-icons/fa';
 
 type CommandType =
@@ -33,6 +37,7 @@ type CommandType =
   | 'education'
   | 'clear'
   | 'home'
+  | 'experience'
   | 'unknown';
 
 interface CommandHistory {
@@ -62,6 +67,7 @@ export function Terminal() {
     'projects',
     'contact',
     'education',
+    'experience',
     'clear',
     'home',
   ];
@@ -283,11 +289,17 @@ export function Terminal() {
       case 'about':
         output = renderAbout();
         break;
+      case 'projects':
+        output = renderProjects();
+        break;
       case 'skills':
         output = renderSkills();
         break;
       case 'contact':
         output = renderContact();
+        break;
+      case 'experience':
+        output = renderExperience();
         break;
       case 'education':
         output = renderEducation();
@@ -342,6 +354,7 @@ export function Terminal() {
     if (cmd === 'projects') return 'projects';
     if (cmd === 'contact') return 'contact';
     if (cmd === 'education') return 'education';
+    if (cmd === 'experience') return 'experience';
     if (cmd === 'clear') return 'clear';
     if (cmd === 'home') return 'home';
     return 'unknown';
@@ -401,6 +414,12 @@ export function Terminal() {
             desc: 'View educational background',
             icon: '🎓',
             color: 'text-orange-400',
+          },
+          {
+            cmd: 'experience',
+            desc: 'Show work experience',
+            icon: '💼',
+            color: 'text-amber-400',
           },
           {
             cmd: 'clear',
@@ -643,20 +662,6 @@ export function Terminal() {
           <div className='text-white font-medium mb-1'>WhatsApp</div>
           <div className='text-gray-400 text-sm text-center'>Message Me</div>
         </a>
-        <a
-          href={contact.instagram}
-          target='_blank'
-          rel='noopener noreferrer'
-          className='group flex flex-col items-center p-6 bg-gradient-to-br from-pink-600/20 to-purple-700/20 rounded-lg border border-pink-500/30 hover:border-pink-400/50 transition-all duration-300 hover:scale-105'
-        >
-          <div className='w-12 h-12 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform'>
-            <FaInstagram size={20} className='text-white' />
-          </div>
-          <div className='text-white font-medium mb-1'>Instagram</div>
-          <div className='text-gray-400 text-sm text-center'>
-            {contact.instagram.replace('https://instagram.com/', '')}
-          </div>
-        </a>
       </div>
     </div>
   );
@@ -691,7 +696,81 @@ export function Terminal() {
       </div>
     </div>
   );
+  const renderExperience = () => (
+    <div className='bg-gradient-to-br from-orange-900/20 to-red-900/20 backdrop-blur-sm border border-orange-500/30 rounded-xl p-6 space-y-6'>
+      <div className='flex items-center space-x-3'>
+        <FaBriefcase className='text-orange-400 text-xl' />
+        <span className='text-white font-bold text-xl bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent'>
+          Work Experience
+        </span>
+      </div>
+      <div className='space-y-6'>
+        {experience.map((job, i) => (
+          <div
+            key={i}
+            className='bg-gray-800/30 rounded-lg p-6 border border-gray-600/20 hover:border-orange-500/30 transition-all duration-300'
+          >
+            <div className='flex items-start justify-between mb-4'>
+              <div>
+                <div className='text-orange-400 font-bold text-lg mb-1'>
+                  {job.position}
+                </div>
+                <div className='text-gray-300 text-sm flex items-center space-x-2'>
+                  <span className='text-yellow-400 font-semibold'>
+                    {job.company}
+                  </span>
+                  <span className='text-gray-500'>•</span>
+                  <span className='text-gray-400'>{job.type}</span>
+                </div>
+              </div>
+            </div>
 
+            <div className='text-gray-400 text-sm mb-4 flex items-center space-x-2'>
+              <span className='text-cyan-400'>📅</span>
+              <span>
+                {job.startDate} - {job.endDate}
+              </span>
+            </div>
+
+            <div className='text-gray-300 mb-4'>{job.description}</div>
+
+            <div className='mb-4'>
+              <div className='text-gray-400 text-sm mb-2 font-semibold'>
+                Technologies:
+              </div>
+              <div className='flex flex-wrap gap-2'>
+                {job.technologies.map((tech, j) => (
+                  <span
+                    key={j}
+                    className='bg-gradient-to-r from-orange-600/20 to-red-600/20 border border-orange-500/30 text-gray-200 px-3 py-1 rounded-full text-xs font-medium'
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <div className='text-gray-400 text-sm mb-2 font-semibold'>
+                Key Responsibilities:
+              </div>
+              <ul className='space-y-1'>
+                {job.responsibilities.map((resp, j) => (
+                  <li
+                    key={j}
+                    className='text-gray-300 text-sm flex items-start space-x-2'
+                  >
+                    <span className='text-green-400 mt-1'>✓</span>
+                    <span>{resp}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
   return (
     <div className='bg-gradient-to-br from-gray-900 via-black to-gray-900 w-full h-screen overflow-hidden relative'>
       {/* Animated background */}
@@ -786,35 +865,145 @@ export function Terminal() {
 }
 
 // Welcome Screen Component with Typing Animation
-function WelcomeScreen({ onComplete }: { onComplete: () => void }) {
+// function WelcomeScreen({ onComplete }: { onComplete: () => void }) {
+//   const [currentLine, setCurrentLine] = useState(0);
+//   const [currentChar, setCurrentChar] = useState(0);
+//   const [displayedLines, setDisplayedLines] = useState<string[]>([]);
+
+//   const welcomeLines = [
+//     '',
+//     "Initializing Minhaj's Portfolio Terminal...",
+//     'Loading modules... ████████████████████ 100%',
+//     '',
+//     '╔══════════════════════════════════════╗',
+//     "║  ✨  M I N H A J ' S   P O R T A L  ✨  ║",
+//     '╚══════════════════════════════════════╝',
+//     '',
+//     '🚀 Full-Stack Developer | ⚛️ React & Next.js Expert | 🟢 Node.js Enthusiast',
+//     '',
+//     '✨ Welcome to my interactive portfolio terminal!',
+//     "💡 Type 'help' to explore available commands",
+//     '🔥 Use TAB for autocompletion, ↑/↓ for history',
+//     '',
+//     'System ready. Happy exploring! 🎉',
+//     '',
+//   ];
+
+//   useEffect(() => {
+//     if (currentLine >= welcomeLines.length) {
+//       setTimeout(() => {
+//         onComplete();
+//       }, 1000);
+//       return;
+//     }
+
+//     const currentLineText = welcomeLines[currentLine];
+
+//     if (currentChar < currentLineText.length) {
+//       const timer = setTimeout(() => {
+//         setDisplayedLines((prev) => {
+//           const newLines = [...prev];
+//           if (!newLines[currentLine]) newLines[currentLine] = '';
+//           newLines[currentLine] = currentLineText.slice(0, currentChar + 1);
+//           return newLines;
+//         });
+//         setCurrentChar((prev) => prev + 1);
+//       }, 30);
+
+//       return () => clearTimeout(timer);
+//     } else {
+//       // Move to next line
+//       const timer = setTimeout(() => {
+//         setCurrentLine((prev) => prev + 1);
+//         setCurrentChar(0);
+//       }, 100);
+
+//       return () => clearTimeout(timer);
+//     }
+//   }, [currentLine, currentChar, onComplete]);
+
+//   return (
+//     <div className='mb-8 space-y-2'>
+//       {displayedLines.map((line, i) => (
+//         <div
+//           key={i}
+//           className={cn(
+//             'min-h-[1.5em] font-mono',
+//             i === 1
+//               ? 'text-cyan-400 font-bold'
+//               : i === 2
+//               ? 'text-green-400'
+//               : i >= 4 && i <= 9
+//               ? 'text-green-400 text-center'
+//               : i === 11
+//               ? 'text-blue-400 font-bold text-center'
+//               : i === 13 || i === 14 || i === 15
+//               ? 'text-yellow-400'
+//               : i === 17
+//               ? 'text-green-400 font-bold'
+//               : 'text-gray-300'
+//           )}
+//         >
+//           <pre className='whitespace-pre-wrap'>{line}</pre>
+//         </div>
+//       ))}
+//       {currentLine < welcomeLines.length && (
+//         <span className='animate-pulse text-green-400 text-lg inline-block'>
+//           █
+//         </span>
+//       )}
+//     </div>
+//   );
+// }
+
+export function WelcomeScreen({ onComplete }: { onComplete: () => void }) {
+  const isSmallScreen = useMediaQuery('(max-width: 321px)');
   const [currentLine, setCurrentLine] = useState(0);
   const [currentChar, setCurrentChar] = useState(0);
   const [displayedLines, setDisplayedLines] = useState<string[]>([]);
 
-  const welcomeLines = [
-    '',
-    "Initializing Minhaj's Portfolio Terminal...",
-    'Loading modules... ████████████████████ 100%',
-    '',
-    '╔══════════════════════════════════════╗',
-    "║  ✨  M I N H A J ' S   P O R T A L  ✨  ║",
-    '╚══════════════════════════════════════╝',
-    '',
-    '🚀 Full-Stack Developer | ⚛️ React Specialist | 🟢 Node.js Enthusiast',
-    '',
-    '✨ Welcome to my interactive portfolio terminal!',
-    "💡 Type 'help' to explore available commands",
-    '🔥 Use TAB for autocompletion, ↑/↓ for history',
-    '',
-    'System ready. Happy exploring! 🎉',
-    '',
-  ];
+  // ✅ Welcome message (responsive)
+  const welcomeLines = isSmallScreen
+    ? [
+        '',
+        "Initializing Minhaj's Portfolio Terminal...",
+        'Loading modules... ████████████████████ 100%',
+        '',
+        "✨ M I N H A J ' S",
+        '💻 P O R T A L',
+        '',
+        '🚀 Full-Stack Developer | ⚛️ React & Next.js Expert | 🟢 Node.js Enthusiast',
+        '',
+        '✨ Welcome to my interactive portfolio terminal!',
+        "💡 Type 'help' to explore available commands",
+        '🔥 Use TAB for autocompletion, ↑/↓ for history',
+        '',
+        'System ready. Happy exploring! 🎉',
+        '',
+      ]
+    : [
+        '',
+        "Initializing Minhaj's Portfolio Terminal...",
+        'Loading modules... ████████████████████ 100%',
+        '',
+        '╔══════════════════════════════════════╗',
+        "║  ✨  M I N H A J ' S   P O R T A L  ✨  ║",
+        '╚══════════════════════════════════════╝',
+        '',
+        '🚀 Full-Stack Developer | ⚛️ React & Next.js Expert | 🟢 Node.js Enthusiast',
+        '',
+        '✨ Welcome to my interactive portfolio terminal!',
+        "💡 Type 'help' to explore available commands",
+        '🔥 Use TAB for autocompletion, ↑/↓ for history',
+        '',
+        'System ready. Happy exploring! 🎉',
+        '',
+      ];
 
+  // 🧠 Typing animation logic
   useEffect(() => {
     if (currentLine >= welcomeLines.length) {
-      setTimeout(() => {
-        onComplete();
-      }, 1000);
+      setTimeout(() => onComplete(), 1000);
       return;
     }
 
@@ -830,18 +1019,15 @@ function WelcomeScreen({ onComplete }: { onComplete: () => void }) {
         });
         setCurrentChar((prev) => prev + 1);
       }, 30);
-
       return () => clearTimeout(timer);
     } else {
-      // Move to next line
       const timer = setTimeout(() => {
         setCurrentLine((prev) => prev + 1);
         setCurrentChar(0);
       }, 100);
-
       return () => clearTimeout(timer);
     }
-  }, [currentLine, currentChar, onComplete]);
+  }, [currentLine, currentChar, onComplete, welcomeLines]);
 
   return (
     <div className='mb-8 space-y-2'>
@@ -858,14 +1044,19 @@ function WelcomeScreen({ onComplete }: { onComplete: () => void }) {
               ? 'text-green-400 text-center'
               : i === 11
               ? 'text-blue-400 font-bold text-center'
-              : i === 13 || i === 14 || i === 15
-              ? 'text-yellow-400'
-              : i === 17
-              ? 'text-green-400 font-bold'
               : 'text-gray-300'
           )}
         >
-          <pre className='whitespace-pre-wrap'>{line}</pre>
+          <pre
+            className={cn(
+              'whitespace-pre-wrap',
+              isSmallScreen && (i === 4 || i === 5)
+                ? 'text-green-400 text-2xl text-center font-bold tracking-wide'
+                : ''
+            )}
+          >
+            {line}
+          </pre>
         </div>
       ))}
       {currentLine < welcomeLines.length && (

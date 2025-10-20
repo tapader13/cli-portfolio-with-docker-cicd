@@ -1,9 +1,8 @@
 export const contact = {
-  email: 'minhaj@example.com',
-  github: 'https://github.com/minhaj',
-  linkedin: 'https://linkedin.com/in/minhaj',
-  facebook: 'https://facebook.com/minhaj',
-  whatsapp: 'https://wa.me/1234567890',
-  instagram: 'https://instagram.com/minhaj',
-  twitter: 'https://twitter.com/minhaj',
+  email: 'minhajtapader0@gmail.com',
+  github: 'https://github.com/tapader13',
+  linkedin: 'hhttps://www.linkedin.com/in/minhaj-uddin-tapader/',
+  facebook: 'https://www.facebook.com/muhammad.minhaj.799316',
+  whatsapp: 'https://wa.me/+8801786224382',
+  twitter: 'https://x.com/MinhajTapader',
 };
